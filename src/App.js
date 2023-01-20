@@ -30,8 +30,6 @@ function App() {
 
   const handleNewPost = (newPost) => {
     setPosts([newPost,...posts])
-    console.log(newPost,'jsjd')
-      
   };
 
  useEffect(() =>{
@@ -41,10 +39,16 @@ Promise.all([fetchPosts(),fetchUsers()])
       const postData=response[0]
       const userData=response[1]
 
-      setPosts(postData)
-      
-      const usersList = userData.sort((a,b)=>{
+    postData.forEach(obj => { 
 
+      const findedUser=userData.find(({ id }) => id === obj.userId)
+      console.log(findedUser,'findedUser')
+      obj.userName = findedUser?.username
+  });
+      console.log(postData,'postData')
+
+      setPosts(postData)
+      const usersList = userData.sort((a,b)=>{
         if (a.name > b.name) {
           return 1;
         }
@@ -54,9 +58,9 @@ Promise.all([fetchPosts(),fetchUsers()])
         return 0;
        })
       setUsers(usersList)
-    }).finally((a) =>{
+    }).finally(() =>{
         setloading(false)
-        console.log('dd',a)
+        
        }) 
     
   },[])
